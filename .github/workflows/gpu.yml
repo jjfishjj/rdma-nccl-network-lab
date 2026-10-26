@@ -1,0 +1,10 @@
+name: NCCL and RDMA benchmark
+on: {workflow_dispatch: {}}
+jobs:
+  benchmark:
+    runs-on: [self-hosted, linux, x64, gpu, infiniband]
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/run_nccl_benchmark.sh network-report
+      - uses: actions/upload-artifact@v4
+        with: {name: nccl-rdma-report, path: network-report}
