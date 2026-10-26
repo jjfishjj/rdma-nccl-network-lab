@@ -18,6 +18,16 @@ export THEORETICAL_GBPS=200
 bash scripts/run_nccl_benchmark.sh network-report
 ```
 
+推薦以固定 CUDA DL 26.08 與 `nccl-tests` commit 的容器執行：
+
+```bash
+docker build -t nvidia-lab/nccl .
+mkdir -p network-report
+docker run --rm --gpus all --network host --ipc=host --ulimit memlock=-1:-1 --cap-add IPC_LOCK \
+  -v /dev/infiniband:/dev/infiniband -v "$PWD/network-report:/workspace/network-report" \
+  nvidia-lab/nccl
+```
+
 腳本保存 topology、NCCL/UCX/CUDA 環境、IB 狀態、選用的 `ib_write_bw` 與 AllReduce 報告。自架 Runner 需具 `gpu`、`infiniband` labels。
 
 ## 驗收重點
